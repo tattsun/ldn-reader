@@ -1,11 +1,14 @@
 module Server where
 
-import qualified Data.Text        as T
-import qualified Data.Text.IO     as T
+import           Control.Concurrent
+import qualified Data.Text          as T
+import qualified Data.Text.IO       as T
 --
-import           Server.Article
+import qualified Server.Article     as A
 import           Server.Base
-import qualified Server.KeyPhrase as K
+import qualified Server.KeyPhrase   as K
+--
+import           System.Environment
 ----------------------------------------------------------------------
 
 {-
@@ -16,4 +19,12 @@ test = debugRun $ do
 -}
 
 test :: IO ()
-test = debugRun $ K.test "私の名前は、やふーです。"
+test = do
+  debugRun $ do
+    A.startCrawler
+  forever $ do
+    liftIO $ threadDelay 1000
+
+--  A.test
+--  args <- getArgs
+--  print =<< (debugRun $ K.getKeyPhrase (args !! 0))

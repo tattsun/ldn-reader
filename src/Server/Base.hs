@@ -36,6 +36,7 @@ import           Control.Applicative      as X
 import           Control.Monad            as X
 import           Control.Monad.IO.Class   as X
 import           Data.Either              as X
+import           Data.List                as X
 import           Data.Maybe               as X
 --
 import           Control.Concurrent.MVar
@@ -90,7 +91,7 @@ data Article = Article { articleTitle       :: T.Text
                        , articleLink        :: T.Text
                        , articleDescription :: T.Text
                        , articleBody        :: Maybe T.Text
-                       , articleGuid        :: T.Text
+                       , articleGuid        :: String
 --                       , articlePubDate :: T.Text
                        , articleRelatedURL  :: Maybe [T.Text] }
                deriving (Show)
@@ -107,7 +108,7 @@ initNews = News <$> hm
 ----------------------------------------------------------------------
 
 data Config = Config { confYahooApplicationID :: String
-                     , confYahooSecretKey     :: String
+                     , confCrawlerDelaySec    :: Int
                      }
               deriving (Show)
 $(deriveJSON defaultOptions{ fieldLabelModifier = drop 4 } ''Config)

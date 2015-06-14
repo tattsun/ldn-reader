@@ -1,15 +1,16 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Server.KeyPhrase where
+module Server.KeyPhrase
+       ( getKeyPhrase
+       ) where
 
-import qualified Network.HTTP.Base          as HTTP
+import           Data.Default
+import qualified Data.Text            as T
+import qualified Network.HTTP.Base    as HTTP
 import           Network.HTTP.Conduit
+import qualified Text.XML             as XML
+import           Text.XML.Lens
 --
 import           Server.Base
---
-import qualified Data.ByteString.Lazy.Char8 as LBS
-import qualified Data.Text.Lazy             as LT
-import qualified Data.Text.Lazy.Encoding    as LT
-import qualified Data.Text.Lazy.IO          as LT
 ----------------------------------------------------------------------
 
 baseUrl :: String
@@ -20,13 +21,20 @@ mkUrl sentence = do
   appId <- confYahooApplicationID . ctxConfig <$> context
   let query = concat ["?appid=", appId
                      ,"&sentence=", HTTP.urlEncode sentence
-                     ,"&output=json"]
+                     ,"&output=xml"]
   return $ baseUrl ++ query
 
-getKeyPhrase sentence = do
+getKeyPhrases :: String -> ContextM [T.Text]
+getKeyPhrases sentence = do
   url <- mkUrl sentence
-  simpleHttp url
+  res <- simpleHttp url
+  let doc = XML.parseLBS_ def res
+      phrases = doc ^.. root . ell "ResultSet" ./ ell "Result" ./ ell "Keyphrase" . text
+  return phrases
 
-test k = do
-  ph <- getKeyPhrase k
-  liftIO $ LT.putStrLn . LT.decodeUtf8 $ ph
+getKeyPhrase :: String -> ContextM (Maybe T.Text)
+getKeyPhrase sentence = do
+  phrases <- getKeyPhrases sentence
+  if null phrases
+    then return Nothing
+    else return . Just . head $ phrases
