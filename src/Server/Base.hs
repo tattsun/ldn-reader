@@ -19,15 +19,15 @@ module Server.Base
        , logFata
        , logWarn
        , logDebg
-         -- * Article
-       , ArticleTag(..)
-       , articleTags
-       , at2String
-       , string2At
-       , News(..)
-       , ArticleMap(..)
-       , Article(..)
-       , initNews
+         -- * RSS
+       , NewsTag(..)
+       , newsTags
+       , nt2String
+       , string2Nt
+       , NewsFeeds(..)
+       , RSS(..)
+       , ArticleSummary(..)
+       , initNewsFeeds
          -- * Debugging
        , debugRun
        ) where
@@ -53,56 +53,54 @@ import           Web.Scotty.Trans         hiding (get, put)
 import qualified Server.Base.Logger       as Log
 ----------------------------------------------------------------------
 
-data ArticleTag = Top | Dom | Int
-                | Eco | Ent | Spo
-                | Cin | Gourmet | Love | Trend
-                deriving (Show, Eq, Ord)
-articleTags = [Top, Dom, Int
-              ,Eco, Ent, Spo
-              ,Cin, Gourmet, Love, Trend]
-at2String :: ArticleTag -> String
-at2String Top = "top"
-at2String Dom = "dom"
-at2String Int = "int"
-at2String Eco = "eco"
-at2String Ent = "ent"
-at2String Spo = "spo"
-at2String Cin = "52"
-at2String Gourmet = "gourmet"
-at2String Love = "love"
-at2String Trend = "trend"
-string2At :: String -> Maybe ArticleTag
-string2At "top" = Just Top
-string2At "dom" = Just Dom
-string2At "int" = Just Int
-string2At "eco" = Just Eco
-string2At "ent" = Just Ent
-string2At "spo" = Just Spo
-string2At "52" = Just Cin
-string2At "gourmet" = Just Gourmet
-string2At "love" = Just Love
-string2At "trend" = Just Trend
-string2At _ = Nothing
+data NewsTag = Top | Dom | Int
+             | Eco | Ent | Spo
+             | Cin | Gourmet | Love | Trend
+             deriving (Show, Eq, Ord)
+newsTags = [Top, Dom, Int
+           ,Eco, Ent, Spo
+           ,Cin, Gourmet, Love, Trend]
+nt2String :: NewsTag -> String
+nt2String Top = "top"
+nt2String Dom = "dom"
+nt2String Int = "int"
+nt2String Eco = "eco"
+nt2String Ent = "ent"
+nt2String Spo = "spo"
+nt2String Cin = "52"
+nt2String Gourmet = "gourmet"
+nt2String Love = "love"
+nt2String Trend = "trend"
+string2Nt :: String -> Maybe NewsTag
+string2Nt "top" = Just Top
+string2Nt "dom" = Just Dom
+string2Nt "int" = Just Int
+string2Nt "eco" = Just Eco
+string2Nt "ent" = Just Ent
+string2Nt "spo" = Just Spo
+string2Nt "52" = Just Cin
+string2Nt "gourmet" = Just Gourmet
+string2Nt "love" = Just Love
+string2Nt "trend" = Just Trend
+string2Nt _ = Nothing
 
-data News = News { unNews :: M.Map ArticleTag (MVar ArticleMap) }
-data ArticleMap = ArticleMap { amLatestList :: [T.Text]
-                             , amArticles   :: M.Map T.Text Article }
-data Article = Article { articleTitle       :: T.Text
-                       , articleLink        :: T.Text
-                       , articleDescription :: T.Text
-                       , articleBody        :: Maybe T.Text
-                       , articleGuid        :: String
+data NewsFeeds = NewsFeeds { unNewsFeeds :: M.Map NewsTag (MVar RSS) }
+data RSS = RSS { unArticleMap :: [ArticleSummary] }
+data ArticleSummary = ArticleSummary { asTitle       :: T.Text
+                                     , asLink        :: T.Text
+                                     , asDescription :: T.Text
+                                     , asGuid        :: String
 --                       , articlePubDate :: T.Text
-                       , articleRelatedURL  :: Maybe [T.Text] }
-               deriving (Show)
+                                     , asRelatedURL  :: Maybe [T.Text] }
+                deriving (Show)
 
-initNews :: IO News
-initNews = News <$> hm
+initNewsFeeds :: IO NewsFeeds
+initNewsFeeds = NewsFeeds <$> hm
   where
-    hm :: IO (M.Map ArticleTag (MVar ArticleMap))
-    hm = flip execStateT M.empty $ forM_ articleTags $ \tag -> do
+    hm :: IO (M.Map NewsTag (MVar RSS))
+    hm = flip execStateT M.empty $ forM_ newsTags $ \tag -> do
       m <- get
-      mvar <- liftIO $ newMVar $ ArticleMap [] M.empty
+      mvar <- liftIO $ newMVar $ RSS []
       put $ M.insert tag mvar m
 
 ----------------------------------------------------------------------
@@ -116,7 +114,7 @@ $(deriveJSON defaultOptions{ fieldLabelModifier = drop 4 } ''Config)
 readConfig :: FilePath -> IO (Maybe Config)
 readConfig fp = Yaml.decodeFile fp
 
-data Context = Context { ctxNews   :: News
+data Context = Context { ctxNews   :: NewsFeeds
                        , ctxLogger :: Log.Logger
                        , ctxConfig :: Config
                        }
@@ -152,7 +150,7 @@ logDebg = log_ Log.DEBG
 
 debugRun :: ContextM a -> IO a
 debugRun m = do
-  news <- initNews
+  news <- initNewsFeeds
   logger <- Log.newLogger Log.DEBG
   conf <- fromJust <$> readConfig "./config.yml"
   let ctx = Context { ctxNews = news
