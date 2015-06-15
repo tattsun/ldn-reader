@@ -1,4 +1,6 @@
 # ldn-reader
 
 ## TODO
-[ ] Exception Handling
+
+- [ ] Exception Handling
+- [ ] Fix space leak

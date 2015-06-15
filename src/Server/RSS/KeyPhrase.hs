@@ -28,7 +28,7 @@ getKeyPhrase src = do
   if null kps
     then return Nothing
     else do
-    logDebg $ head kps
+    logDebg $ head kps
     return . Just . head $ kps
 
 ----------------------------------------------------------------------
