@@ -70,10 +70,9 @@ data NewsTag = Top | Dom | Int
              | Eco | Ent | Spo
              | Cin | Gourmet | Love | Trend
              deriving (Show, Eq, Ord)
---newsTags = [Top, Dom, Int
---           ,Eco, Ent, Spo
---           ,Cin, Gourmet, Love, Trend]
-newsTags = [Top]
+newsTags = [Top, Dom, Int
+           ,Eco, Ent, Spo
+           ,Cin, Gourmet, Love, Trend]
 nt2String :: NewsTag -> String
 nt2String Top = "top"
 nt2String Dom = "dom"
