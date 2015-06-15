@@ -38,6 +38,7 @@ library
                      , text >= 1.2.0.6
                      , transformers >= 0.3.0.0
                      , unordered-containers >= 0.2.5.1
+                     , wai-middleware-static >= 0.6.0.1
                      , warp >= 3.0.13.1
                      , xml-conduit >= 1.2.6
                      , xml-lens >= 0.1.6.3
@@ -67,6 +68,7 @@ executable ldn-reader
                      , text >= 1.2.0.6
                      , transformers >= 0.3.0.0
                      , unordered-containers >= 0.2.5.1
+                     , wai-middleware-static >= 0.6.0.1
                      , warp >= 3.0.13.1
                      , xml-conduit >= 1.2.6
                      , xml-lens >= 0.1.6.3

@@ -15,6 +15,9 @@ module Server.Base
        , runApp
          -- * Environment Reader
        , context
+         -- * Scotty Support
+       , paramMaybe
+       , paramDefault
          -- * Logging
        , logNorm
        , logFata
@@ -131,6 +134,7 @@ data Config = Config { confYahooApplicationID :: String
                      , confCrawlerDelaySec    :: Int
                      , confEnvironment        :: Environment
                      , confCrawlerEnabled     :: Bool
+                     , confArticleMaxNum      :: Int
                      }
               deriving (Show)
 $(deriveJSON defaultOptions{ fieldLabelModifier = drop 4 } ''Config)
@@ -157,6 +161,18 @@ type Act = ActionT LT.Text ContextM
 
 runApp :: Port -> Context -> App () -> IO ()
 runApp port ctx = scottyT port (runContextM ctx) (runContextM ctx)
+
+----------------------------------------------------------------------
+
+paramMaybe :: (Parsable a) => LT.Text -> Act (Maybe a)
+paramMaybe key = (Just <$> param key) `rescue` (\_ -> return Nothing)
+
+paramDefault :: (Parsable a) => LT.Text -> a -> Act a
+paramDefault key defvar = do
+  val <- paramMaybe key
+  case val of
+    Just v -> return v
+    Nothing -> return defvar
 
 ----------------------------------------------------------------------
 

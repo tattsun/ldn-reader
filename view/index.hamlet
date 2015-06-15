@@ -1,16 +1,18 @@
 $doctype 5
 <html>
   <head>
-    <meta charset="utf-8">
-    <title>Livedoor News Reader
+    <meta charset="utf-8" />
+    <meta name=viewport content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=10.0, user-scalable=yes" />
+    <link rel=stylesheet href="./css/main.css" />
   <body>
-    <header>
-      <h1>Livedoor News Reader
-    $forall a <- articles
-      <section>
-        <h2>#{asTitle a}
-        <div>#{preEscapedText $ asDescription a}
-        <ul>
-        $forall ra <- (take 5 $ asRelatedArticles a)
-          <li>
-            <a href=#{raUrl ra}>#{raTitle ra}
+    <div .container>
+      <header>
+        <h1>Livedoor News Reader
+      $forall a <- articles
+                   <section>
+                     <h2>#{asTitle a}
+                     <div>#{preEscapedText $ asDescription a}
+                     <ul>
+                       $forall ra <- (take 5 $ asRelatedArticles a)
+                                     <li>
+                                       <a href=#{raUrl ra}>#{raTitle ra}

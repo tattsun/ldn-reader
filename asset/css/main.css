@@ -1,0 +1,13 @@
+body {
+    -webkit-text-size-adjust: 100%;
+}
+
+.container {
+    margin: 0 auto;
+    max-width: 1070px;
+}
+
+article,aside,canvas,details,figcaption,figure,
+header,footer,main,menu,nav,section,summary {
+	display: block;
+}
