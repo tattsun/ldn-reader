@@ -5,6 +5,7 @@ module Server.RSS.Keyphrase
 
 import           Data.Default
 import qualified Data.Text            as T
+import           Network.HTTP.Base    (urlEncode)
 import qualified Network.HTTP.Conduit as HTTP
 import qualified Text.XML             as XML
 import           Text.XML.Lens
@@ -26,7 +27,9 @@ getKeyPhrase src = do
   kps <- getKeyPhrases src
   if null kps
     then return Nothing
-    else return . Just . head $ kps
+    else do
+    logDebg $ head kps
+    return . Just . head $ kps
 
 ----------------------------------------------------------------------
 
@@ -39,6 +42,6 @@ requestUrl src = do
   return $
     concat [ baseurl
            , "?appid=", appid
-           , "&sentence=", T.unpack src
+           , "&sentence=", urlEncode $ T.unpack src
            , "&output=xml"
            ]

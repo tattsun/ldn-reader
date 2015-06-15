@@ -29,6 +29,6 @@ parseRSS xml =
                                  , asLink = link
                                  , asDescription = desc
                                  , asGuid = T.unpack guid
-                                 , asRelatedURL = Nothing
+                                 , asRelatedArticles = []
                                  }
                ) datum

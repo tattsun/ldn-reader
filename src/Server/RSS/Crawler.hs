@@ -9,6 +9,7 @@ import qualified Network.HTTP.Conduit     as HTTP
 import           Server.Base
 import qualified Server.RSS.Cache         as Cache
 import           Server.RSS.Parser
+import           Server.RSS.Related
 ----------------------------------------------------------------------
 
 startCrawler :: ContextM ()
@@ -34,7 +35,8 @@ crawlRSS tag = do
   logDebg $ T.concat ["Crawling ", T.pack . show $ tag]
 
   rss <- parseRSS <$> (HTTP.simpleHttp . rssurl $ tag)
-  Cache.put tag rss
+  rss' <- addRelatedArticlesRSS rss
+  Cache.put tag rss'
 
   logDebg $ T.concat ["Finished crawling ", T.pack . show $ tag]
   return ()

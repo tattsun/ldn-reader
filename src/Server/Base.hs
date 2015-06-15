@@ -28,6 +28,8 @@ module Server.Base
        , RSS(..)
        , ArticleSummary(..)
        , initNewsFeeds
+       , RelatedArticle(..)
+       , SearchCache(..)
          -- * Debugging
        , debugRun
        ) where
@@ -86,13 +88,19 @@ string2Nt _ = Nothing
 
 data NewsFeeds = NewsFeeds { unNewsFeeds :: M.Map NewsTag (MVar RSS) }
 data RSS = RSS { unArticleMap :: [ArticleSummary] }
-data ArticleSummary = ArticleSummary { asTitle       :: T.Text
-                                     , asLink        :: T.Text
-                                     , asDescription :: T.Text
-                                     , asGuid        :: String
+data ArticleSummary = ArticleSummary { asTitle           :: T.Text
+                                     , asLink            :: T.Text
+                                     , asDescription     :: T.Text
+                                     , asGuid            :: String
 --                       , articlePubDate :: T.Text
-                                     , asRelatedURL  :: Maybe [T.Text] }
+                                     , asRelatedArticles :: [RelatedArticle] }
                 deriving (Show)
+data RelatedArticle = RelatedArticle { raTitle :: T.Text
+                                     , raUrl   :: T.Text
+                                     } deriving (Show)
+data SearchCache = SearchCache { unSearchCache ::
+                                     MVar (M.Map T.Text [RelatedArticle])
+                               }
 
 initNewsFeeds :: IO NewsFeeds
 initNewsFeeds = NewsFeeds <$> hm
@@ -102,6 +110,9 @@ initNewsFeeds = NewsFeeds <$> hm
       m <- get
       mvar <- liftIO $ newMVar $ RSS []
       put $ M.insert tag mvar m
+
+initSearchCache :: IO SearchCache
+initSearchCache = SearchCache <$> newMVar M.empty
 
 ----------------------------------------------------------------------
 
@@ -114,9 +125,10 @@ $(deriveJSON defaultOptions{ fieldLabelModifier = drop 4 } ''Config)
 readConfig :: FilePath -> IO (Maybe Config)
 readConfig fp = Yaml.decodeFile fp
 
-data Context = Context { ctxNews   :: NewsFeeds
-                       , ctxLogger :: Log.Logger
-                       , ctxConfig :: Config
+data Context = Context { ctxNews        :: NewsFeeds
+                       , ctxSearchCache :: SearchCache
+                       , ctxLogger      :: Log.Logger
+                       , ctxConfig      :: Config
                        }
 newtype ContextM a = ContextM { unContextM :: ReaderT Context IO a }
                      deriving (Monad, Applicative, Functor, MonadReader Context, MonadIO)
@@ -151,9 +163,11 @@ logDebg = log_ Log.DEBG
 debugRun :: ContextM a -> IO a
 debugRun m = do
   news <- initNewsFeeds
+  scache <- initSearchCache
   logger <- Log.newLogger Log.DEBG
   conf <- fromJust <$> readConfig "./config.yml"
   let ctx = Context { ctxNews = news
+                    , ctxSearchCache = scache
                     , ctxLogger = logger
                     , ctxConfig = conf
                     }

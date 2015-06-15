@@ -4,9 +4,8 @@ import           Control.Concurrent
 import qualified Data.Text          as T
 import qualified Data.Text.IO       as T
 --
---import qualified Server.Article     as A
---import           Server.Base
---import qualified Server.KeyPhrase   as K
+import           Server.Base
+import           Server.RSS
 --
 import           System.Environment
 ----------------------------------------------------------------------
@@ -19,7 +18,9 @@ test = debugRun $ do
 -}
 
 test :: IO ()
-test = undefined
+test = debugRun $ do
+  startCrawler
+  liftIO $ forever $ threadDelay 100000
 
 --  A.test
 --  args <- getArgs
