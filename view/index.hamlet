@@ -1,0 +1,16 @@
+$doctype 5
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Livedoor News Reader
+  <body>
+    <header>
+      <h1>Livedoor News Reader
+    $forall a <- articles
+      <section>
+        <h2>#{asTitle a}
+        <div>#{preEscapedText $ asDescription a}
+        <ul>
+        $forall ra <- (take 5 $ asRelatedArticles a)
+          <li>
+            <a href=#{raUrl ra}>#{raTitle ra}

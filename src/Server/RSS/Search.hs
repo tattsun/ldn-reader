@@ -41,6 +41,8 @@ parseResult str =
 search :: T.Text -> ContextM [RelatedArticle]
 search keyword = do
   json <- liftIO . HTTP.simpleHttp $ searchUrl keyword
+  logDebg $ T.pack $ searchUrl keyword
+  logDebg $ T.pack . show $ json
   return $ parseResult json
 
 ----------------------------------------------------------------------

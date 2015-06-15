@@ -9,6 +9,7 @@ module Server.Base
        , ContextM
        , App
        , Act
+       , Environment(..)
          -- * Monad Runner
        , runContextM
        , runApp
@@ -19,6 +20,8 @@ module Server.Base
        , logFata
        , logWarn
        , logDebg
+         -- * Config
+       , readConfig
          -- * RSS
        , NewsTag(..)
        , newsTags
@@ -30,6 +33,7 @@ module Server.Base
        , initNewsFeeds
        , RelatedArticle(..)
        , SearchCache(..)
+       , initSearchCache
          -- * Debugging
        , debugRun
        ) where
@@ -37,6 +41,7 @@ module Server.Base
 import           Control.Applicative      as X
 import           Control.Monad            as X
 import           Control.Monad.IO.Class   as X
+import           Control.Monad.Trans      as X
 import           Data.Either              as X
 import           Data.List                as X
 import           Data.Maybe               as X
@@ -55,13 +60,20 @@ import           Web.Scotty.Trans         hiding (get, put)
 import qualified Server.Base.Logger       as Log
 ----------------------------------------------------------------------
 
+data Environment = Production | Development
+                 deriving (Show, Eq, Ord)
+$(deriveJSON defaultOptions ''Environment)
+
+----------------------------------------------------------------------
+
 data NewsTag = Top | Dom | Int
              | Eco | Ent | Spo
              | Cin | Gourmet | Love | Trend
              deriving (Show, Eq, Ord)
-newsTags = [Top, Dom, Int
-           ,Eco, Ent, Spo
-           ,Cin, Gourmet, Love, Trend]
+--newsTags = [Top, Dom, Int
+--           ,Eco, Ent, Spo
+--           ,Cin, Gourmet, Love, Trend]
+newsTags = [Top]
 nt2String :: NewsTag -> String
 nt2String Top = "top"
 nt2String Dom = "dom"
@@ -118,6 +130,8 @@ initSearchCache = SearchCache <$> newMVar M.empty
 
 data Config = Config { confYahooApplicationID :: String
                      , confCrawlerDelaySec    :: Int
+                     , confEnvironment        :: Environment
+                     , confCrawlerEnabled     :: Bool
                      }
               deriving (Show)
 $(deriveJSON defaultOptions{ fieldLabelModifier = drop 4 } ''Config)

@@ -18,9 +18,9 @@ startCrawler = do
   delayMcs <- (*1000000) . confCrawlerDelaySec . ctxConfig <$> context
 
   void . liftIO . forkIO . runContextM ctx . forever $ do
-    logDebg "Start Crawling All RSS"
+    logNorm "Start Crawling All RSS"
     crawlAllRSS
-    logDebg "Finished Crawling All RSS"
+    logNorm "Finished Crawling All RSS"
     liftIO . threadDelay $ delayMcs
 
 crawlAllRSS :: ContextM ()
@@ -32,13 +32,13 @@ crawlAllRSS = do
 
 crawlRSS :: NewsTag -> ContextM ()
 crawlRSS tag = do
-  logDebg $ T.concat ["Crawling ", T.pack . show $ tag]
+  logNorm $ T.concat ["Crawling ", T.pack . show $ tag]
 
   rss <- parseRSS <$> (HTTP.simpleHttp . rssurl $ tag)
   rss' <- addRelatedArticlesRSS rss
   Cache.put tag rss'
 
-  logDebg $ T.concat ["Finished crawling ", T.pack . show $ tag]
+  logNorm $ T.concat ["Finished crawling ", T.pack . show $ tag]
   return ()
 
 ----------------------------------------------------------------------
