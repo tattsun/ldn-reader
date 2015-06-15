@@ -1,12 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Server.Base.Logger where
 
-import           Control.Applicative
 import           Control.Concurrent
-import           Control.Concurrent.Chan
 import           Control.Monad
-import qualified Data.Text               as T
-import qualified Data.Text.IO            as T
+import qualified Data.Text          as T
+import qualified Data.Text.IO       as T
 ----------------------------------------------------------------------
 
 data LogLevel = DEBG | WARN | FATA | NORM
