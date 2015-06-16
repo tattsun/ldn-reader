@@ -56,6 +56,7 @@ import           Data.Aeson.TH
 import qualified Data.Map                 as M
 import qualified Data.Text                as T
 import qualified Data.Text.Lazy           as LT
+import           Data.UnixTime
 import qualified Data.Yaml                as Yaml
 import           Network.Wai.Handler.Warp (Port)
 import           Web.Scotty.Trans         hiding (get, put)
@@ -102,12 +103,13 @@ string2Nt _ = Nothing
 
 data NewsFeeds = NewsFeeds { unNewsFeeds :: M.Map NewsTag (MVar RSS) }
 data RSS = RSS { unArticleMap :: [ArticleSummary] }
-data ArticleSummary = ArticleSummary { asTitle           :: T.Text
-                                     , asLink            :: T.Text
-                                     , asDescription     :: T.Text
-                                     , asGuid            :: String
---                       , articlePubDate :: T.Text
-                                     , asRelatedArticles :: [RelatedArticle] }
+data ArticleSummary = ArticleSummary { asTitle            :: T.Text
+                                     , asLink             :: T.Text
+                                     , asDescription      :: T.Text
+                                     , asGuid             :: String
+                                     , asPubDate          :: UnixTime
+                                     , asPubDateFormatted :: T.Text
+                                     , asRelatedArticles  :: [RelatedArticle] }
                 deriving (Show)
 data RelatedArticle = RelatedArticle { raTitle :: T.Text
                                      , raUrl   :: T.Text
@@ -135,6 +137,8 @@ data Config = Config { confYahooApplicationID :: String
                      , confEnvironment        :: Environment
                      , confCrawlerEnabled     :: Bool
                      , confArticleMaxNum      :: Int
+                     , confArticleNumPerPage  :: Int
+                     , confUseSampleXml       :: Bool
                      }
               deriving (Show)
 $(deriveJSON defaultOptions{ fieldLabelModifier = drop 4 } ''Config)

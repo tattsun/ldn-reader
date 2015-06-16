@@ -3,16 +3,51 @@ $doctype 5
   <head>
     <meta charset="utf-8" />
     <meta name=viewport content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=10.0, user-scalable=yes" />
+    <title>Livedoor News Reader
+    <link rel=stylesheet href="./vendor/slimmenu.css" />
     <link rel=stylesheet href="./css/main.css" />
+    <link media="only screen and (max-device-width:480px)" href="./css/smart.css" type="text/css" rel="stylesheet" />
+    <link media="screen and (min-device-width:481px)" href="./css/pc.css" type="text/css" rel="stylesheet" />
   <body>
+    <navigation>
+      <ul #navigation .slimmenu>
+        <li>
+          <a href="/top">主要
+        <li>
+          <a href="/dom">国内
+        <li>
+          <a href="/int">海外
+        <li>
+          <a href="/eco">IT・経済
+        <li>
+          <a href="/ent">芸能
+        <li>
+          <a href="/spo">スポーツ
+        <li>
+          <a href="/52">映画
+        <li>
+          <a href="/gourmet">グルメ
+        <li>
+          <a href="/love">女子
+        <li>
+          <a href="/trend">トレンド
     <div .container>
-      <header>
-        <h1>Livedoor News Reader
-      $forall a <- articles
+      <h1 .pctitle>Livedoor News Reader
+      $forall a <- (take articleNum $ articles)
                    <section>
                      <h2>#{asTitle a}
-                     <div>#{preEscapedText $ asDescription a}
-                     <ul>
-                       $forall ra <- (take 5 $ asRelatedArticles a)
+                     <.pubdate>#{asPubDateFormatted a}
+                     <.description>#{preEscapedText $ asDescription a}
+                     <ul .related>
+                       $forall ra <- (take 3 $ asRelatedArticles a)
                                      <li>
                                        <a href=#{raUrl ra}>#{raTitle ra}
+      $if length articles > articleNum
+              <.pager-button>
+                <a href=?offset=#{offset + articleNum} .pager>次のページ
+      $if offset > 0
+                         <.pager-button>
+                           <a href=?offset=#{offset - articleNum} .pager>前のページ
+  <script src="./vendor/jquery.js">
+  <script src="./vendor/slimmenu.js">
+  <script src="./js/main.js">

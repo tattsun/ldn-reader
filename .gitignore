@@ -2,6 +2,7 @@
 profiling.prof.html
 config.yml
 TAGS
+asset/xml/sample.xml
 
 ### Haskell ###
 dist

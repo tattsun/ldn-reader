@@ -1,0 +1,41 @@
+.container {
+    background-color: #F0F5FF;
+}
+
+section {
+    background-color: #fff;
+    margin: 1em;
+    border: solid 1px #D7E5FF;
+    padding-bottom: 0.5em;
+}
+
+.description {
+    padding: 0.7em;
+}
+
+h2 {
+    font-size: 1.2em;
+    margin: 0.2em;
+    font-weight: normal;
+}
+
+ul {
+    padding: 0 0 0 1.5em;
+    margin: 0;
+}
+
+.pager-button {
+    margin: 1em auto;
+    width: 80%;
+    padding: 5%;
+    background-color: #D7E5FF;
+    text-align: center;
+
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+}
+
+.pctitle {
+    display: none;
+}

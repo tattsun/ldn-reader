@@ -64,3 +64,43 @@ Percentage of the requests served within a certain time (ms)
   99%   1431
  100%   1534 (longest request)
 ```
+
+#### 06/17 15:08 a8ad3c72f4527b97c54f4e188388d8ea753d0bc3
+パーサーレベルで関連記事の取得件数を制限した
+```
+Server Software:        Warp/3.0.13.1
+Server Hostname:        127.0.0.1
+Server Port:            3000
+
+Document Path:          /top
+Document Length:        34271 bytes
+
+Concurrency Level:      100
+Time taken for tests:   15.023 seconds
+Complete requests:      10000
+Failed requests:        0
+Total transferred:      343900000 bytes
+HTML transferred:       342710000 bytes
+Requests per second:    665.66 [#/sec] (mean)
+Time per request:       150.226 [ms] (mean)
+Time per request:       1.502 [ms] (mean, across all concurrent requests)
+Transfer rate:          22355.68 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0   33  38.3      3     172
+Processing:    37  103 108.0    101    1934
+Waiting:       37   98 101.4    100    1930
+Total:         41  136 114.2    110    2012
+
+Percentage of the requests served within a certain time (ms)
+  50%    110
+  66%    129
+  75%    145
+  80%    152
+  90%    182
+  95%    215
+  98%    251
+  99%    455
+ 100%   2012 (longest request)
+```

@@ -1,0 +1,32 @@
+
+section {
+    padding: 0em 1em 1em 1em;
+}
+
+.pager-button {
+    padding: 1em 0 1em 2em;
+}
+
+navigation {
+    text-align: center;
+}
+
+ul#navigation.slimmenu {
+    background-color: #39404C;
+}
+
+ul.slimmenu>li {
+    background-color: #39404C;
+}
+
+ul.slimmenu li a {
+    color: #FBFEFF;
+}
+
+.pctitle {
+    color: #444D5C;
+    text-align: center;
+    padding: 0.7em;
+    font-weight: bold;
+    font-size: 2em;
+}
