@@ -42,4 +42,4 @@ searchUrl t = do
   useSample <- confUseSampleXml . ctxConfig <$> context
   if useSample
     then return $ "http://127.0.0.1:3000/xml/sample.xml?q=" ++ T.unpack t
-    else return $ "https://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss&q=" ++ T.unpack t
+    else return $ "http://www.bing.com/news/search?format=RSS&q=" ++ T.unpack t
