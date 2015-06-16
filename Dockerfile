@@ -11,4 +11,4 @@ RUN cabal update && cabal install --force-reinstalls
 
 EXPOSE 3000
 
-["/root/.cabal/bin/ldn-reader"]
+CMD ["/root/.cabal/bin/ldn-reader", "+RTS", "-N"]
