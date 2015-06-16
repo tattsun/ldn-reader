@@ -31,10 +31,15 @@ parseResult xml =
 
 search :: T.Text -> ContextM [RelatedArticle]
 search keyword = do
-  json <- liftIO . HTTP.simpleHttp $ searchUrl keyword
+  url <- searchUrl keyword
+  json <- liftIO . HTTP.simpleHttp $ url
   return $ parseResult json
 
 ----------------------------------------------------------------------
 
-searchUrl :: T.Text -> String
-searchUrl = (++) "https://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss&q=" . T.unpack
+searchUrl :: T.Text -> ContextM String
+searchUrl t = do
+  useSample <- confUseSampleXml . ctxConfig <$> context
+  if useSample
+    then return $ "http://127.0.0.1:3000/xml/sample.xml?q=" ++ T.unpack t
+    else return $ "https://news.google.com/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss&q=" ++ T.unpack t

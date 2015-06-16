@@ -37,6 +37,7 @@ library
                      , shakespeare >= 2.0.5
                      , text >= 1.2.0.6
                      , transformers >= 0.3.0.0
+                     , unix-time >= 0.3.5
                      , unordered-containers >= 0.2.5.1
                      , wai-middleware-static >= 0.6.0.1
                      , warp >= 3.0.13.1
@@ -67,6 +68,7 @@ executable ldn-reader
                      , shakespeare >= 2.0.5
                      , text >= 1.2.0.6
                      , transformers >= 0.3.0.0
+                     , unix-time >= 0.3.5
                      , unordered-containers >= 0.2.5.1
                      , wai-middleware-static >= 0.6.0.1
                      , warp >= 3.0.13.1
@@ -98,6 +100,7 @@ executable profiling
                      , shakespeare >= 2.0.5
                      , text >= 1.2.0.6
                      , transformers >= 0.3.0.0
+                     , unix-time >= 0.3.5
                      , unordered-containers >= 0.2.5.1
                      , wai-middleware-static >= 0.6.0.1
                      , warp >= 3.0.13.1

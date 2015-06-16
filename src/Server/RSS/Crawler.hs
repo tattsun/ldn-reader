@@ -34,7 +34,7 @@ crawlRSS :: NewsTag -> ContextM ()
 crawlRSS tag = do
   logNorm $ T.concat ["Crawling ", T.pack . show $ tag]
 
-  rss <- fixRSSNum =<< parseRSS <$> (HTTP.simpleHttp . rssurl $ tag)
+  rss <- fixRSSNum =<< parseRSS =<< (HTTP.simpleHttp . rssurl $ tag)
   rss' <- addRelatedArticlesRSS rss
   Cache.put tag rss'
 

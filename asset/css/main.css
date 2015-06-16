@@ -1,13 +1,166 @@
+/* RESET CSS START */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-style:normal;
+    font-weight: normal;
+    font-size: 100%;
+    vertical-align: baseline;
+}
+
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+
+html{
+    overflow-y: scroll;
+}
+
+blockquote, q {
+    quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+
+input, textarea,{
+    margin: 0;
+    padding: 0;
+}
+
+table{
+    border-collapse: collapse;
+    border-spacing:0;
+}
+
+caption, th{
+    text-align: left;
+}
+
+a:focus {
+    outline:none;
+}
+
+.clearfix:after {
+    content: ".";
+    display: block;
+    clear: both;
+    height: 0;
+    visibility: hidden;
+}
+
+.clearfix {
+    min-height: 1px;
+}
+
+* html .clearfix {
+    height: 1px;
+    /*¥*//*/
+    height: auto;
+    overflow: hidden;
+    /**/
+}
+
+/* RESET CSS END */
+
 body {
+    margin: 0;
+    padding: 0;
     -webkit-text-size-adjust: 100%;
+    background-color: #F0F5FF;
 }
 
 .container {
+    background-color: #fff;
+    padding: 0;
     margin: 0 auto;
-    max-width: 1070px;
+    max-width: 800px;
 }
 
 article,aside,canvas,details,figcaption,figure,
 header,footer,main,menu,nav,section,summary {
 	display: block;
+}
+
+header {
+    background-color: #8495B2;
+    font-weight: bold;
+    font-size: 1.8em;
+    padding: 0.3em;
+    color: #F0F5FF;
+}
+
+section {
+    margin-bottom: 1em;
+
+}
+
+h2 {
+    font-weight: bold;
+    font-size: 1.4em;
+    padding: 0.3em;
+}
+
+.description {
+    padding: 0.3em;
+}
+
+.related {
+    list-style: none;
+    padding: 0.5em;
+    margin: 0.2em 1em 0.2em 1em;
+    background-color: #FFF2D7;
+}
+
+
+.pager {
+    text-decoration: none;
+    color: #8495B2;
+}
+
+.menu-collapser {
+    background-color: #8495B2;
+    font-size: 1.4em;
+    padding: 0.3em;
+    height: 60px;
+}
+
+ul.slimmenu>li {
+    background-color: #F0F5FF;
+}
+
+a {
+    text-decoration: none;
+    color: #6C7A91;
+}
+
+a:visited {
+    color: #A1B6D9;
+}
+
+a:hover {
+    color: #B4CBF2;
+}
+
+.pubdate {
+    padding: 0 0 0 0.7em;
+    color: #787878;
+    font-size: 0.7em;
 }

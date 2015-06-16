@@ -18,10 +18,20 @@ api :: App ()
 api = do
   middleware $ staticPolicy $ addBase "asset"
   get "/:tag" $ do
-    tag <- do
-      p <- param "tag"
-      if null p
-        then return "top"
-        else return p
-    (RSS articles) <- lift . getRSS . fromJust $ string2Nt tag
+    tag <- param "tag"
+    rss <- lift . getRSS $ defString2Nt tag
+
+    offset <- (read :: String -> Int) <$> paramDefault "offset" "0"
+    let articles = drop offset $ unArticleMap rss
+--    forM_ articles $ \a -> do
+--      lift $ logDebg $ T.concat [ "TITLE: ", asTitle a, "\n"
+--                                , "LINK: ", asLink a, "\n"
+--                                , "DESC: ", asDescription a, "\n"
+--                                ]
+
+    articleNum <- confArticleNumPerPage . ctxConfig <$> lift context
+
     html $ renderHtml $ $(hamletFile "view/index.hamlet") undefined
+
+defString2Nt :: String -> NewsTag
+defString2Nt str = maybe Top id (string2Nt str)
