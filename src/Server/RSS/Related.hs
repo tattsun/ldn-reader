@@ -6,7 +6,7 @@ module Server.RSS.Related
 import qualified Data.Text              as T
 --
 import           Server.Base
-import           Server.RSS.Keyphrase
+import           Server.RSS.KeyPhrase
 import           Server.RSS.Search
 import qualified Server.RSS.SearchCache as C
 ----------------------------------------------------------------------

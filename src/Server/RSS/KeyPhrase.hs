@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Server.RSS.Keyphrase
+module Server.RSS.KeyPhrase
        ( getKeyPhrase
        ) where
 
