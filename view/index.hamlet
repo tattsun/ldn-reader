@@ -4,10 +4,13 @@ $doctype 5
     <meta charset="utf-8" />
     <meta name=viewport content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=10.0, user-scalable=yes" />
     <title>Livedoor News Reader
-    <link rel=stylesheet href="./vendor/slimmenu.css" />
-    <link rel=stylesheet href="./css/main.css" />
-    <link media="only screen and (max-device-width:480px)" href="./css/smart.css" type="text/css" rel="stylesheet" />
-    <link media="screen and (min-device-width:481px)" href="./css/pc.css" type="text/css" rel="stylesheet" />
+    <link rel=stylesheet href="/vendor/slimmenu.css" />
+    <link rel=stylesheet href="/css/main.css" />
+    $if isMobile
+      <link href="/css/smart.css" type="text/css" rel="stylesheet" />
+    $else
+      <link href="/css/pc.css" type="text/css" rel="stylesheet" />
+
   <body>
     <navigation>
       <ul #navigation .slimmenu>
@@ -48,6 +51,6 @@ $doctype 5
       $if offset > 0
                          <.pager-button>
                            <a href=?offset=#{offset - articleNum} .pager>前のページ
-  <script src="./vendor/jquery.js">
-  <script src="./vendor/slimmenu.js">
-  <script src="./js/main.js">
+  <script src="/vendor/jquery.js">
+  <script src="/vendor/slimmenu.js">
+  <script src="/js/main.js">
