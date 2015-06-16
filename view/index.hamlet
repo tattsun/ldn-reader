@@ -36,6 +36,8 @@ $doctype 5
           <a href="/trend">トレンド
     <div .container>
       <h1 .pctitle>Livedoor News Reader
+      $if not isMobile
+        <#toMobile>
       $forall a <- (take articleNum $ articles)
                    <section>
                      <h2>#{asTitle a}
