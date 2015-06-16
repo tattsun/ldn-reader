@@ -3,6 +3,7 @@ module Server.RSS.Crawler where
 
 import           Control.Concurrent
 import           Control.Concurrent.Async
+import           Control.Exception
 import qualified Data.Text                as T
 import qualified Network.HTTP.Conduit     as HTTP
 --
@@ -27,7 +28,14 @@ crawlAllRSS :: ContextM ()
 crawlAllRSS = do
   ctx <- context
 
-  asyncs <- mapM (liftIO . async . runContextM ctx . crawlRSS) newsTags
+  asyncs <- forM newsTags $ \tag ->
+    liftIO . async $ runContextM ctx (crawlRSS tag)
+    `catch` (\(SomeException e) -> runContextM ctx $
+                 logFata $ T.concat ["Crawl failed on "
+                                    ,T.pack . show $ tag
+                                    ," because of ", T.pack . show $ e
+                                    ,". Server will try it later."])
+
   mapM_ (liftIO . wait) asyncs
 
 crawlRSS :: NewsTag -> ContextM ()
