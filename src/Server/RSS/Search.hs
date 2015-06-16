@@ -21,8 +21,8 @@ parseResult xml =
   let doc = XML.parseLBS_ def xml
       getTxts t = doc ^.. root ./ el "channel" ./ el "item" ./ el t . text
 
-      titles = getTxts "title"
-      links = getTxts "link"
+      titles = take 3 $ getTxts "title"
+      links = take 3 $ getTxts "link"
 
       datum = zip titles links
   in map (\(title, link) -> RelatedArticle title link) datum
