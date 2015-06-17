@@ -31,7 +31,11 @@ mainView isMobile = do
 
     offset <- (read :: String -> Int) <$> paramDefault "offset" "0"
     let articles = drop offset $ unArticleMap rss
+    let lnk str = if isMobile
+                  then T.concat ["/m/", str]
+                  else T.concat ["/", str]
 
+    inlinejs <- ctxInlineJs <$> lift context
     articleNum <- confArticleNumPerPage . ctxConfig <$> lift context
 
     html $ renderHtml $ $(hamletFile "view/index.hamlet") undefined

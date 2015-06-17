@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Server where
 
+import qualified Data.Text.IO       as T
 import           Web.Scotty.Trans
 --
 import           Server.API
@@ -14,6 +15,7 @@ initContext = do
   conf <- fromJust <$> readConfig "./config.yml"
   news <- initNewsFeeds
   scache <- initSearchCache
+  inlinejs <- T.readFile "asset/js/inline.js"
   logger <- if confEnvironment conf == Development
             then Log.newLogger Log.DEBG
             else Log.newLogger Log.WARN
@@ -21,6 +23,7 @@ initContext = do
                    , ctxSearchCache = scache
                    , ctxLogger = logger
                    , ctxConfig = conf
+                   , ctxInlineJs = inlinejs
                    }
 
 run :: IO ()

@@ -55,6 +55,7 @@ import           Control.Monad.State
 import           Data.Aeson.TH
 import qualified Data.Map                 as M
 import qualified Data.Text                as T
+import qualified Data.Text.IO             as T
 import qualified Data.Text.Lazy           as LT
 import           Data.UnixTime
 import qualified Data.Yaml                as Yaml
@@ -150,6 +151,7 @@ data Context = Context { ctxNews        :: NewsFeeds
                        , ctxSearchCache :: SearchCache
                        , ctxLogger      :: Log.Logger
                        , ctxConfig      :: Config
+                       , ctxInlineJs    :: T.Text
                        }
 newtype ContextM a = ContextM { unContextM :: ReaderT Context IO a }
                      deriving (Monad, Applicative, Functor, MonadReader Context, MonadIO)
@@ -198,10 +200,12 @@ debugRun m = do
   news <- initNewsFeeds
   scache <- initSearchCache
   logger <- Log.newLogger Log.DEBG
+  inlinejs <- T.readFile "asset/js/inline.js"
   conf <- fromJust <$> readConfig "./config.yml"
   let ctx = Context { ctxNews = news
                     , ctxSearchCache = scache
                     , ctxLogger = logger
                     , ctxConfig = conf
+                    , ctxInlineJs = inlinejs
                     }
   runContextM ctx m
